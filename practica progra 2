@@ -1,0 +1,192 @@
+//pregunta 3
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+
+class Empleado {
+public:
+    std::string nombre;
+    char tipo; 
+    double sueldoBasico;
+    double afp;
+    double seguro;
+    double bonificacion;
+    double sueldoNeto;
+
+    Empleado(const std::string& nombre, char tipo, double sueldoBasico) 
+        : nombre(nombre), tipo(tipo), sueldoBasico(sueldoBasico) {}
+
+    void calcularDeduccionesYBonificaciones() {
+        afp = sueldoBasico * 0.08;
+        seguro = sueldoBasico * 0.05;
+        if (tipo == 'C') {
+            bonificacion = sueldoBasico * 0.08;
+        } else if (tipo == 'N') {
+            bonificacion = sueldoBasico * 0.12;
+        }
+        sueldoNeto = sueldoBasico - afp - seguro + bonificacion;
+    }
+};
+
+int main() {
+    std::vector<Empleado> empleados;
+    int cantidadEmpleados;
+    std::cout << "Ingrese la cantidad de empleados: ";
+    std::cin >> cantidadEmpleados;
+
+    for (int i = 0; i < cantidadEmpleados; ++i) {
+        std::string nombre;
+        char tipo;
+        double sueldoBasico;
+
+        std::cout << "Ingrese el nombre del empleado: ";
+        std::cin >> nombre;
+        std::cout << "Ingrese el tipo de empleado (C-contratado, N-nombrado): ";
+        std::cin >> tipo;
+        std::cout << "Ingrese el sueldo básico del empleado: ";
+        std::cin >> sueldoBasico;
+
+        Empleado empleado(nombre, tipo, sueldoBasico);
+        empleado.calcularDeduccionesYBonificaciones();
+        empleados.push_back(empleado);
+    }
+
+    int cantidadContratados = 0, cantidadNombrados = 0;
+    double totalSueldosContratados = 0.0, totalSueldosNombrados = 0.0;
+
+    std::cout << "\nDetalles de los empleados:\n";
+    std::cout << std::fixed << std::setprecision(2);
+
+    for (const auto& emp : empleados) {
+        std::cout << "Nombre: " << emp.nombre 
+                  << ", Tipo: " << emp.tipo 
+                  << ", Sueldo Básico: " << emp.sueldoBasico 
+                  << ", AFP: " << emp.afp 
+                  << ", Seguro: " << emp.seguro 
+                  << ", Bonificación: " << emp.bonificacion 
+                  << ", Sueldo Neto: " << emp.sueldoNeto 
+                  << "\n";
+        if (emp.tipo == 'C') {
+            cantidadContratados++;
+            totalSueldosContratados += emp.sueldoNeto;
+        } else if (emp.tipo == 'N') {
+            cantidadNombrados++;
+            totalSueldosNombrados += emp.sueldoNeto;
+        }
+    }
+
+    std::cout << "\nResumen consolidado:\n";
+    std::cout << "Cantidad de empleados contratados: " << cantidadContratados 
+              << ", Total sueldos netos: " << totalSueldosContratados << "\n";
+    std::cout << "Cantidad de empleados nombrados: " << cantidadNombrados 
+              << ", Total sueldos netos: " << totalSueldosNombrados << "\n";
+
+    return 0;
+}
+//pregunta 1
+#include <iostream>
+using namespace std;
+
+int main() {
+    int matriz[3][3], x, y;
+
+    for (x = 0; x <= 2; x++)
+        for (y = 0; y <= 2; y++) {
+            cout << "Introduzca elemento en fila " << x + 1 << ", columna " << y + 1 << ": ";
+            cin >> matriz[x][y];
+        }
+
+    cout << "Matriz original: ";
+    for (x = 0; x <= 2; x++) {
+        for (y = 0; y <= 2; y++)
+            cout << "\t" << matriz[x][y];
+        cout << "\n";
+    }
+
+    cout << "Matriz modificada (ceros en diagonal): ";
+    for (x = 0; x <= 2; x++)
+        for (y = 0; y <= 2; y++)
+            if (x == y)
+                matriz[x][y] = 0;
+
+    for (x = 0; x <= 2; x++) {
+        for (y = 0; y <= 2; y++)
+            cout << "\t" << matriz[x][y];
+        cout << "\n";
+    }
+
+    return 0;
+}
+//pregunta 2
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+#include <algorithm>
+
+using namespace std;
+
+class Empleado {
+public:
+    int codigo;
+    string nombre;
+    string talla;
+    double peso;
+    double sueldo;
+
+    Empleado(int codigo, const string& nombre, const string& talla, double peso, double sueldo)
+        : codigo(codigo), nombre(nombre), talla(talla), peso(peso), sueldo(sueldo) {}
+};
+
+int main() {
+    vector<Empleado> empleados;
+    int cantidadEmpleados;
+    cout << "Ingrese la cantidad de empleados: ";
+    cin >> cantidadEmpleados;
+
+    for (int i = 0; i < cantidadEmpleados; ++i) {
+        int codigo;
+        string nombre, talla;
+        double peso, sueldo;
+
+        cout << "Ingrese el código del empleado: ";
+        cin >> codigo;
+        cout << "Ingrese el nombre del empleado: ";
+        cin.ignore(); // Limpiar el buffer
+        getline(cin, nombre);
+        cout << "Ingrese la talla del empleado: ";
+        cin >> talla;
+        cout << "Ingrese el peso del empleado: ";
+        cin >> peso;
+        cout << "Ingrese el sueldo del empleado: ";
+        cin >> sueldo;
+
+        empleados.push_back(Empleado(codigo, nombre, talla, peso, sueldo));
+    }
+
+    int totalTrabajadores = cantidadEmpleados;
+    int trabajadoresConSueldoMayorA1000 = count_if(empleados.begin(), empleados.end(), [](const Empleado& emp) {
+        return emp.sueldo > 1000.00;
+    });
+
+    sort(empleados.begin(), empleados.end(), [](const Empleado& a, const Empleado& b) {
+        return a.codigo > b.codigo;
+    });
+
+    cout << "Detalles de los empleados:";
+    cout << fixed << setprecision(2);
+    for (const auto& emp : empleados) {
+        cout << "Código: " << emp.codigo
+             << ", Nombre: " << emp.nombre
+             << ", Talla: " << emp.talla
+             << ", Peso: " << emp.peso
+             << ", Sueldo: " << emp.sueldo
+             << "\n";
+    }
+
+    cout << "Total de trabajadores: " << totalTrabajadores << "\n";
+    cout << "Total de trabajadores con sueldo mayor a S/ 1000.00: " << trabajadoresConSueldoMayorA1000 << "\n";
+
+    return 0;
+}
